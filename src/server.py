@@ -1,10 +1,12 @@
 import socket
-from multiprocessing import Pool
+import processor
+from multiprocessing.pool import ThreadPool
 
 class Server:
-    def __init__(self, address: str, port: int) -> None:
+    def __init__(self, address: str, port: int, cp: processor.Processor) -> None:
         self.address = address
         self.port = port
+        self.__cp = cp
 
     def __enter__(self):
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -13,8 +15,8 @@ class Server:
         print("Socket binded")
         self.__socket.listen()
         print("Socket opened")
-        self.__pool = Pool()
-        #self.__pool.apply_async(self.__listen)
+        self.__pool = ThreadPool()
+        self.__pool.apply_async(self.__listen)
         return self
     
     def __listen(self):
@@ -25,7 +27,7 @@ class Server:
 
     def __process(self, sock: socket.socket):
         data = sock.recv(80)
-        print("{}", data.decode())
+        self.__cp.process(data)
         sock.close()
     
     def __exit__(self, *args):
