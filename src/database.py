@@ -1,4 +1,5 @@
 from env import Env
+import logging
 from pymongo import MongoClient
 
 class Database:
@@ -35,8 +36,7 @@ class Database:
     def __get_connection_string(self) -> str:
         cs = Env.get_mongo_srv()
         if cs is None:
-            print("connection string is empty")
-            exit(1)
+            logging.fatal("connection string is empty")
 
         return cs
     

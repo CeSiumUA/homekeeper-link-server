@@ -1,14 +1,16 @@
 import database
 import msgpack
+import logging
 from env import Env
 from os import environ
 from dotenv import load_dotenv
 
 load_dotenv()
 
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
+
 if Env.get_mongo_srv() is None:
-    print('connection string not found!')
-    exit(1)
+    logging.fatal('connection string not found!')
 
 key_path = input('Enter key path:')
 
@@ -22,6 +24,6 @@ with database.Database() as db:
 
     db.add_client(key)
 
-    print("key imported successfully")
+    logging.info("key imported successfully")
 
-print("done")
+logging.info("done")

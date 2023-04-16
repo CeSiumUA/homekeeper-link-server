@@ -1,5 +1,6 @@
 import database
 import msgpack
+import logging
 from nacl.signing import VerifyKey
 
 class Processor:
@@ -16,8 +17,8 @@ class Processor:
         try:
             time = verify_key.verify(data["data"])
         except:
-            print("Wrong signature")
+            logging.error("Wrong signature")
             return
         
-        print("Key verified")
+        logging.info("Key verified")
         
