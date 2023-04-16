@@ -30,5 +30,16 @@ class Processor:
         timestamp = time.time_ns()
 
         client['last_online'] = timestamp
+        client['notified'] = False
 
         self.__db.update_client(client=client)
+
+    def check_clients(self):
+        overdue_time = time.time_ns() - Env.get_notify_interval_ns()
+
+        clients = self.__db.get_overdue_clients(overdue_time=overdue_time)
+
+        for client in clients:
+            print("client is offline for too long!")
+            client["notified"] = True
+            self.__db.update_client(client=client)

@@ -14,9 +14,13 @@ class Database:
         collection = self.__get_clients_collection()
         return collection.find_one({self.__client_index_name: client_id})
     
+    def get_overdue_clients(self, overdue_time):
+        collection = self.__get_clients_collection()
+        return collection.find({"last_online": {"$lt": overdue_time}, "notified": False})
+    
     def update_client(self, client):
         collection = self.__get_clients_collection()
-        collection.update_one({self.__client_index_name: client['client_id']}, {"$set": {"last_online": client['last_online']}})
+        collection.update_one({self.__client_index_name: client['client_id']}, {"$set": {"last_online": client['last_online']}, "$set": {"notified": client["notified"]}})
 
     def add_client(self, client):
         collection = self.__get_clients_collection()
