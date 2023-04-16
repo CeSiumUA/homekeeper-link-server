@@ -20,11 +20,11 @@ class Server:
     def __listen(self):
         while(True):
             r_sock, r_ep = self.__socket.accept()
-            logging.info("Client {} connected", r_ep)
-            self.__pool.apply_async(self.__process, r_sock)
+            logging.info("Client {}:{} connected".format(r_ep[0], r_ep[1]))
+            self.__pool.apply_async(self.__process, kwds={'sock': r_sock})
 
-    def __process(self, sock: socket.socket):
-        data = sock.recv(80)
+    def __process(self, sock):
+        data = sock.recv(1024)
         self.__cp.process(data)
         sock.close()
     

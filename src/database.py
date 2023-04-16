@@ -13,6 +13,10 @@ class Database:
     def get_client(self, client_id):
         collection = self.__get_clients_collection()
         return collection.find_one({self.__client_index_name: client_id})
+    
+    def update_client(self, client):
+        collection = self.__get_clients_collection()
+        collection.update_one({self.__client_index_name: client['client_id']}, {"$set": {"last_online": client['last_online']}})
 
     def add_client(self, client):
         collection = self.__get_clients_collection()

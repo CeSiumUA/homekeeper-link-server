@@ -5,6 +5,7 @@ class Env:
     MONGO_DB = 'MONGO_DB'
     PORT = 'PORT'
     ADDRESS = 'ADDRESS'
+    NOTIFY_INTERVAL = 'NOTIFY_INTERVAL'
 
     def get_mongo_srv():
         return environ.get(Env.MONGO_SRV)
@@ -21,3 +22,11 @@ class Env:
     
     def get_address():
         return environ.get(Env.ADDRESS)
+    
+    def get_notify_interval_ns():
+        interval = environ.get(Env.NOTIFY_INTERVAL)
+
+        if interval is None:
+            interval = 120
+
+        return interval * 10e9
