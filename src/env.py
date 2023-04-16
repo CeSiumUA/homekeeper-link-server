@@ -6,6 +6,8 @@ class Env:
     PORT = 'PORT'
     ADDRESS = 'ADDRESS'
     NOTIFY_INTERVAL = 'NOTIFY_INTERVAL'
+    CHAT_ID = 'CHAT_ID'
+    TL_TOKEN = 'TL_TOKEN'
 
     def get_mongo_srv():
         return environ.get(Env.MONGO_SRV)
@@ -33,3 +35,12 @@ class Env:
             interval = 120
 
         return int(interval)
+    
+    def get_chat_id():
+        id = environ.get(Env.CHAT_ID)
+        if id is None:
+            return id
+        return int(id)
+    
+    def get_tl_token():
+        return environ.get(Env.TL_TOKEN)
