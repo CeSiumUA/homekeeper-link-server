@@ -1,4 +1,4 @@
-import os
+from env import Env
 from pymongo import MongoClient
 
 class Database:
@@ -12,6 +12,10 @@ class Database:
     def get_client(self, client_id):
         collection = self.__get_clients_collection()
         return collection.find_one({self.__client_index_name: client_id})
+
+    def add_client(self, client):
+        collection = self.__get_clients_collection()
+        collection.insert_one(client)
 
     def ensure_index_created(self):
         database = self.__get_database()
@@ -29,10 +33,15 @@ class Database:
         self.__client.close()
 
     def __get_connection_string(self) -> str:
-        return os.environ("MONGO_SRV")
+        cs = Env.get_mongo_srv()
+        if cs is None:
+            print("connection string is empty")
+            exit(1)
+
+        return cs
     
     def __get_database(self):
-        return self.__client[os.environ("MONGO_DB")]
+        return self.__client[Env.get_mongo_db()]
     
     def __get_clients_collection(self):
         db = self.__get_database()

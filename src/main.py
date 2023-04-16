@@ -2,12 +2,13 @@ import database
 import server
 import os
 import processor
+from env import Env
 from dotenv import load_dotenv
 
 load_dotenv()
 
-address = os.environ("HOMEKEEPER_ADDRESS")
-port = os.environ("HOMEKEEPER_PORT")
+address = Env.get_address()
+port = Env.get_port()
 
 with database.Database() as db:
 
