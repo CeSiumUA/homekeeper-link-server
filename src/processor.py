@@ -47,7 +47,7 @@ class Processor:
             logging.fatal("telegram bot token not provided")
 
         for client in clients:
-            with TelegramNotifier(tl_token) as ntf:
-                asyncio.run(ntf.send_text_message("Client ```{}``` is offline for more than 2 minutes".format(client["client_id"])))
+            ntf = TelegramNotifier(tl_token)
+            asyncio.run(ntf.send_text_message("Client ```{}``` is offline for more than 2 minutes".format(client["client_id"])))
             client["notified"] = True
             self.__db.update_client(client=client)
