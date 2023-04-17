@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  homekeeper-link-server:
+    build:
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "25534:25534"
+    networks:
+      - main-network
+    environment:
+      - MONGO_DB=homekeeper
+
+networks:
+  main-network:
+    driver: bridge
