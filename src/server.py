@@ -14,10 +14,9 @@ class Server:
         self.__socket.bind((self.address, self.port))
         self.__socket.listen()
         self.__pool = ThreadPool()
-        self.__pool.apply_async(self.__listen)
         return self
     
-    def __listen(self):
+    def listen(self):
         while(True):
             r_sock, r_ep = self.__socket.accept()
             logging.info("Client {}:{} connected".format(r_ep[0], r_ep[1]))
