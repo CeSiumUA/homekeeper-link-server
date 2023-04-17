@@ -15,7 +15,7 @@ class TelegramNotifier:
         if chat_id is None:
             logging.fatal("chat id is not provided")
             return
-        await self.__bot.send_message(chat_id=chat_id, text=message)
+        await self.__bot.send_message(chat_id=chat_id, text=message, parse_mode='MarkdownV2')
 
     def __exit__(self, *args):
         self.__bot.close()
