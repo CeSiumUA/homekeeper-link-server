@@ -26,7 +26,7 @@ with database.Database() as db:
     scheduler.start()
 
     with server.Server(address=address, port=port, cp=cp) as srv:
-        input("Type anything to exit...")
+        srv.listen()
 
     scheduler.shutdown()
 
