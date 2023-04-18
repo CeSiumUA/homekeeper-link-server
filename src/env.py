@@ -26,7 +26,7 @@ class Env:
         return environ.get(Env.ADDRESS)
     
     def get_notify_interval_ns():
-        return Env.get_notify_interval() * 10e9
+        return Env.get_notify_interval() * 10e8
     
     def get_notify_interval():
         interval = environ.get(Env.NOTIFY_INTERVAL)
