@@ -10,7 +10,13 @@ services:
     networks:
       - main-network
     environment:
-      - MONGO_DB=homekeeper
+      - MONGO_SRV=${MONGO_SRV}
+      - MONGO_DB=${MONGO_DB}
+      - PORT=${PORT}
+      - ADDRESS=${ADDRESS}
+      - NOTIFY_INTERVAL=${NOTIFY_INTERVAL}
+      - TL_TOKEN=${TL_TOKEN}
+      - CHAT_ID=${CHAT_ID}
 
 networks:
   main-network:
