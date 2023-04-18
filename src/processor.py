@@ -35,7 +35,7 @@ class Processor:
         
         logging.info("key verified")
 
-        timestamp = time.time_ns()
+        timestamp = int(time.time())
 
         if client['notified'] == True:
             client['notified'] = False
@@ -46,7 +46,7 @@ class Processor:
         self.__db.update_client(client=client)
 
     def check_clients(self):
-        overdue_time = time.time_ns() - Env.get_notify_interval_ns()
+        overdue_time = int(time.time()) - Env.get_notify_interval()
 
         clients = self.__db.get_overdue_clients(overdue_time=overdue_time)
 
