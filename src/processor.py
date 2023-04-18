@@ -39,7 +39,7 @@ class Processor:
 
         if client['notified'] == True:
             client['notified'] = False
-            asyncio.run(self.__ntf.send_text_message("Client ```{}``` is back online".format(client["display_name"])))
+            asyncio.run(self.__ntf.send_text_message("Client `{}` is back online".format(client["display_name"])))
 
         client['last_online'] = timestamp
 
@@ -51,6 +51,6 @@ class Processor:
         clients = self.__db.get_overdue_clients(overdue_time=overdue_time)
 
         for client in clients:
-            asyncio.run(self.__ntf.send_text_message("Client ```{}``` is offline for more than 2 minutes".format(client["display_name"])))
+            asyncio.run(self.__ntf.send_text_message("Client `{}` is offline for more than 2 minutes".format(client["display_name"])))
             client["notified"] = True
             self.__db.update_client(client=client)
