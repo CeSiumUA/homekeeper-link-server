@@ -11,6 +11,12 @@ import asyncio
 class Processor:
     def __init__(self, db: database.Database) -> None:
         self.__db = db
+        tl_token = Env.get_tl_token()
+
+        if tl_token is None:
+            logging.fatal("telegram bot token not provided")
+
+        self.__ntf = TelegramNotifier(tl_token)
 
     def process(self, data):
         data = msgpack.unpackb(data)
@@ -31,8 +37,11 @@ class Processor:
 
         timestamp = time.time_ns()
 
+        if client['notified'] == True:
+            client['notified'] = False
+            asyncio.run(self.__ntf.send_text_message("Client ```{}``` is back online".format(client["display_name"])))
+
         client['last_online'] = timestamp
-        client['notified'] = False
 
         self.__db.update_client(client=client)
 
@@ -41,13 +50,7 @@ class Processor:
 
         clients = self.__db.get_overdue_clients(overdue_time=overdue_time)
 
-        tl_token = Env.get_tl_token()
-
-        if tl_token is None:
-            logging.fatal("telegram bot token not provided")
-
         for client in clients:
-            ntf = TelegramNotifier(tl_token)
-            asyncio.run(ntf.send_text_message("Client ```{}``` is offline for more than 2 minutes".format(client["client_id"])))
+            asyncio.run(self.__ntf.send_text_message("Client ```{}``` is offline for more than 2 minutes".format(client["display_name"])))
             client["notified"] = True
             self.__db.update_client(client=client)
