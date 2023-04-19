@@ -20,7 +20,7 @@ class Database:
     
     def update_client(self, client):
         collection = self.__get_clients_collection()
-        collection.update_one({self.__client_index_name: client['client_id']}, {"$set": {"last_online": client['last_online'], "notified": client['notified']}})
+        collection.update_one({self.__client_index_name: client['client_id']}, {"$set": {"last_online": client['last_online'], "notified": client['notified'], "last_ip": client['last_ip']}})
 
     def add_client(self, client):
         collection = self.__get_clients_collection()
