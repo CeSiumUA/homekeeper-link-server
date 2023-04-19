@@ -18,7 +18,7 @@ class Processor:
 
         self.__ntf = TelegramNotifier(tl_token)
 
-    def process(self, data):
+    def process(self, data, ep_ip):
         data = msgpack.unpackb(data)
         client = self.__db.get_client(data["client_id"])
         if client is None:
@@ -40,6 +40,10 @@ class Processor:
         if client['notified'] == True:
             client['notified'] = False
             asyncio.run(self.__ntf.send_text_message("Client ```{}``` is back online".format(client["display_name"])))
+
+        if client['last_ip'] != ep_ip:
+            client['last_ip'] = ep_ip
+            asyncio.run(self.__ntf.send_text_message("Client `{}` has changed it's IP address to: `{}`".format(client["display_name"], client["last_ip"])))
 
         client['last_online'] = timestamp
 

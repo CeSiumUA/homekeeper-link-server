@@ -20,11 +20,11 @@ class Server:
         while(True):
             r_sock, r_ep = self.__socket.accept()
             logging.info("Client {}:{} connected".format(r_ep[0], r_ep[1]))
-            self.__pool.apply_async(self.__process, kwds={'sock': r_sock})
+            self.__pool.apply_async(self.__process, kwds={'sock': r_sock, 'ep_ip': r_ep[0]})
 
-    def __process(self, sock):
+    def __process(self, sock, ep_ip):
         data = sock.recv(1024)
-        self.__cp.process(data)
+        self.__cp.process(data, ep_ip)
         sock.close()
     
     def __exit__(self, *args):
