@@ -9,6 +9,10 @@ from notifier import TelegramNotifier
 import asyncio
 
 class Processor:
+
+    KEEP_ALIVE_REQUEST = 0
+    IP_ADDRESS_REQUEST = 1
+
     def __init__(self, db: database.Database) -> None:
         self.__db = db
         tl_token = Env.get_tl_token()
@@ -18,8 +22,13 @@ class Processor:
 
         self.__ntf = TelegramNotifier(tl_token)
 
-    def process(self, data, ep_ip):
+    def process(self, data, ep_ip) -> bytearray | None:
         data = msgpack.unpackb(data)
+        if data['request_type'] == self.IP_ADDRESS_REQUEST:
+            msg = {
+                'ip_address': ep_ip
+            }
+            return msgpack.packb(msg)
         client = self.__db.get_client(data["client_id"])
         if client is None:
             return
